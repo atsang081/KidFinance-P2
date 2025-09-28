@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Piggy Bank</title>
+    <style>
+        /* Global styles */
+        :root {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background-color: #f0f8ff;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* App styles */
+        .app {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .app-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .app-main {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .dashboard {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            background-color: #e3f2fd;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .fixed-term-summary {
+            background: #e8f5e9;
+            border-radius: 15px;
+            padding: 15px;
+            width: 100%;
+            margin-top: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .fixed-term-summary h3 {
+            margin-top: 0;
+            color: #2e7d32;
+            text-align: center;
+        }
+
+        .fixed-term-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .fixed-term-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .fixed-term-amount {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #2e7d32;
+        }
+
+        .fixed-term-details {
+            flex: 1;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .fixed-term-interest {
+            font-weight: bold;
+            color: #ff6f00;
+        }
+
+        .transaction-section {
+            background-color: #fff9c4;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .transaction-section h2, .fixed-term-section h2 {
+            color: #ff6f00;
+            margin-top: 0;
+        }
+
+        .fixed-term-section {
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .fixed-term-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .fixed-term-buttons button {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* Balance Card styles */
+        .balance-card {
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            min-width: 250px;
+        }
+
+        .balance-card h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin: 15px 0;
+        }
+
+        .currency {
+            font-size: 2rem;
+        }
+
+        .amount {
+            font-size: 3rem;
+        }
+
+        /* Transaction Form styles */
+        .transaction-form {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group h3 {
+            color: #6a1b9a;
+            margin-bottom: 10px;
+        }
+
+        .type-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .type-button {
+            flex: 1;
+            min-width: 100px;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            background: #e1bee7;
+            color: #4a148c;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .type-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .type-button.selected {
+            background: #9c27b0;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .amount-input, .description-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ba68c8;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .amount-input:focus, .description-input:focus {
+            outline: none;
+            border-color: #7b1fa2;
+            box-shadow: 0 0 5px rgba(123, 31, 162, 0.5);
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #ff6f00 0%, #ff3d00 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .submit-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        /* Transactions Page Button */
+        .transactions-page-button {
+            text-align: center;
+        }
+
+        .view-transactions-button {
+            background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .view-transactions-button:hover {
+            background: linear-gradient(135deg, #0097a7 0%, #00838f 100%);
+            transform: scale(1.05);
+        }
+
+        /* Transactions Page */
+        .transactions-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .transactions-page {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .transactions-page h2 {
+            color: #333;
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .transactions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .transaction-item:hover {
+            transform: translateX(5px);
+        }
+
+        .transaction-item.spending {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+        }
+
+        .transaction-item.income {
+            background: #fff8e1;
+            border-left: 5px solid #ffc107;
+        }
+
+        .transaction-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-description {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .transaction-date {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .transaction-amount {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .transaction-amount.spending {
+            color: #f44336;
+        }
+
+        .transaction-amount.income {
+            color: #ffc107;
+        }
+
+        .no-transactions {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+            font-style: italic;
+        }
+
+        /* Reset Button */
+        .reset-button {
+            background: #ff5252;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .reset-button:hover {
+            background: #d32f2f;
+            transform: scale(1.05);
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .app {
+                padding: 10px;
+            }
+            
+            .dashboard {
+                flex-direction: column;
+            }
+            
+            .app-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script>
+        // Simple state management
+        let state = {
+            balance: 0,
+            transactions: [],
+            showTransactions: false,
+            parentPassword: null, // No default password
+            isPasswordSet: false, // Track if password has been set
+            showIncomePassword: false,
+            showResetPassword: false,
+            tempTransaction: null, // Temporary storage for transaction details
+            fixedTermDeposits: [], // Fixed term deposits
+            termInterestRates: { // Interest rates for different terms
+                1: 2.5, // 1 month - 2.5%
+                2: 3.0, // 2 months - 3.0%
+                3: 4.0  // 3 months - 4.0%
+            },
+            showFixedTermDashboard: false,
+            showCreateFixedTerm: false
+        };
+
+        // Load state from localStorage
+        function loadState() {
+            const savedState = localStorage.getItem('piggyBankState');
+            if (savedState) {
+                const parsedState = JSON.parse(savedState);
+                
+                // Convert date strings back to Date objects for fixed term deposits
+                if (parsedState.fixedTermDeposits) {
+                    parsedState.fixedTermDeposits = parsedState.fixedTermDeposits.map(deposit => ({
+                        ...deposit,
+                        startDate: new Date(deposit.startDate),
+                        endDate: new Date(deposit.endDate)
+                    }));
+                }
+                
+                state = {...state, ...parsedState};
+            }
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            localStorage.setItem('piggyBankState', JSON.stringify(state));
+        }
+
+        // Render the app
+        function render() {
+            const root = document.getElementById('root');
+            
+            // Check if password needs to be set
+            if (!state.isPasswordSet) {
+                root.innerHTML = `
+                    <div class="app">
+                        <header class="app-header">
+                            <h1>💰 My Piggy Bank 💰</h1>
+                            <p>Welcome! Please set up a parent password to get started.</p>
+                        </header>
+
+                        <main class="app-main">
+                            <div class="transaction-section">
+                                <h2>Set Parent Password</h2>
+                                <div class="transaction-form">
+                                    <form id="setupPasswordForm">
+                                        <div class="form-group">
+                                            <label>
+                                                <h3>Create Parent Password</h3>
+                                                <input
+                                                    type="password"
+                                                    id="setupPasswordInput"
+                                                    placeholder="Enter a strong password"
+                                                    class="password-input"
+                                                    required
+                                                />
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label>
+                                                <h3>Confirm Password</h3>
+                                                <input
+                                                    type="password"
+                                                    id="confirmSetupPasswordInput"
+                                                    placeholder="Confirm your password"
+                                                    class="password-input"
+                                                    required
+                                                />
+                                            </label>
+                                        </div>
+
+                                        <button type="submit" class="submit-button">
+                                            Set Password
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+                `;
+                
+                // Attach event listener for password setup
+                document.getElementById('setupPasswordForm').addEventListener('submit', handlePasswordSetup);
+                return;
+            }
+            
+            root.innerHTML = `
+                <div class="app">
+                    <header class="app-header">
+                        <h1>💰 My Piggy Bank 💰</h1>
+                        <p>Learn about money with our fun financial app!</p>
+                    </header>
+
+                    <main class="app-main">
+                        <div class="dashboard">
+                            <div class="balance-card">
+                                <h2>💰 My Balance 💰</h2>
+                                <div class="balance-amount">
+                                    <span class="currency">HK$</span>
+                                    <span class="amount">${state.balance.toFixed(2)}</span>
+                                </div>
+                            </div>
+                            
+                            ${state.fixedTermDeposits.length > 0 ? `
+                                <div class="fixed-term-summary">
+                                    <h3>Active Fixed Term Deposits</h3>
+                                    ${state.fixedTermDeposits
+                                        .sort((a, b) => new Date(a.endDate) - new Date(b.endDate))
+                                        .map(deposit => {
+                                            const daysLeft = Math.ceil((new Date(deposit.endDate) - new Date()) / (1000 * 60 * 60 * 24));
+                                            return `
+                                                <div class="fixed-term-item">
+                                                    <div class="fixed-term-amount">HK$${deposit.amount.toFixed(2)}</div>
+                                                    <div class="fixed-term-details">
+                                                        <div>${deposit.term} month(s) at ${deposit.interestRate}%</div>
+                                                        <div>Matures: ${new Date(deposit.endDate).toLocaleDateString()} (${daysLeft} days left)</div>
+                                                    </div>
+                                                    <div class="fixed-term-interest">+HK$${deposit.interestEarned.toFixed(2)}</div>
+                                                </div>
+                                            `;
+                                        }).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="transaction-section">
+                            <h2>What would you like to do today?</h2>
+                            <div class="transaction-form">
+                                <form id="transactionForm">
+                                    <div class="form-group">
+                                        <label>
+                                            <h3>What did you do?</h3>
+                                            <div class="type-buttons">
+                                                <button type="button" class="type-button selected" data-type="spending">
+                                                    🛍️ Spending
+                                                </button>
+                                                <button type="button" class="type-button" data-type="income">
+                                                    💰 Income
+                                                </button>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>
+                                            <h3>Amount (HKD)</h3>
+                                            <input
+                                                type="number"
+                                                id="amountInput"
+                                                placeholder="Enter amount"
+                                                min="0"
+                                                step="0.01"
+                                                class="amount-input"
+                                            />
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>
+                                            <h3>Description</h3>
+                                            <input
+                                                type="text"
+                                                id="descriptionInput"
+                                                placeholder="What was it for?"
+                                                class="description-input"
+                                            />
+                                        </label>
+                                    </div>
+
+                                    <button type="submit" class="submit-button">
+                                        Record Spending
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="fixed-term-section">
+                            <h2>Fixed Term Deposits</h2>
+                            <div class="fixed-term-buttons">
+                                <button class="submit-button" id="createFixedTermButton">
+                                    Create New Deposit
+                                </button>
+                                <button class="view-transactions-button" id="fixedTermDashboardButton">
+                                    Fixed Term Dashboard
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="transactions-page-button">
+                            <button class="view-transactions-button" id="viewTransactionsButton">
+                                View All Transactions
+                            </button>
+                        </div>
+
+                        <div class="reset-section">
+                            <button class="reset-button" id="resetButton">
+                                Reset App
+                            </button>
+                        </div>
+                    </main>
+
+                    ${state.showTransactions ? `
+                        <div class="transactions-overlay">
+                            <div class="transactions-page">
+                                <button class="close-button" id="closeTransactions">&times;</button>
+                                <h2>📋 Your Transactions 📋</h2>
+                                <div class="transactions-list">
+                                    ${state.transactions.length > 0 ? 
+                                        state.transactions.map(transaction => `
+                                            <div class="transaction-item ${transaction.type}">
+                                                <div class="transaction-icon">
+                                                    ${transaction.type === 'spending' ? '🛍️' : '💰'}
+                                                </div>
+                                                <div class="transaction-details">
+                                                    <div class="transaction-description">${transaction.description || 'No description'}</div>
+                                                    <div class="transaction-date">${transaction.date}</div>
+                                                </div>
+                                                <div class="transaction-amount ${transaction.type}">
+                                                    ${transaction.type === 'income' ? '+' : '-'}HK$${transaction.amount.toFixed(2)}
+                                                </div>
+                                            </div>
+                                        `).join('') : 
+                                        '<div class="no-transactions">No transactions yet. Start by recording your first transaction!</div>'
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${state.showIncomePassword ? `
+                        <div class="transactions-overlay">
+                            <div class="transactions-page">
+                                <button class="close-button" id="closeIncomePassword">&times;</button>
+                                <h2>🔒 Parent Password Required</h2>
+                                <div class="transaction-form">
+                                    <form id="incomePasswordForm">
+                                        <div class="form-group">
+                                            <label>
+                                                <h3>Enter Parent Password</h3>
+                                                <input
+                                                    type="password"
+                                                    id="incomePasswordInput"
+                                                    placeholder="Enter parent password"
+                                                    class="password-input"
+                                                />
+                                            </label>
+                                        </div>
+                                        <button type="submit" class="submit-button">
+                                            Submit
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${state.showResetPassword ? `
+                        <div class="transactions-overlay">
+                            <div class="transactions-page">
+                                <button class="close-button" id="closeResetPassword">&times;</button>
+                                <h2>🔒 Parent Password Required</h2>
+                                <p>To reset the app, please enter the parent password.</p>
+                                <div class="transaction-form">
+                                    <form id="resetPasswordForm">
+                                        <div class="form-group">
+                                            <label>
+                                                <h3>Enter Parent Password</h3>
+                                                <input
+                                                    type="password"
+                                                    id="resetPasswordInput"
+                                                    placeholder="Enter parent password"
+                                                    class="password-input"
+                                                />
+                                            </label>
+                                        </div>
+                                        <button type="submit" class="submit-button">
+                                            Reset App
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${state.showFixedTermDashboard ? `
+                        <div class="transactions-overlay">
+                            <div class="transactions-page">
+                                <button class="close-button" id="closeFixedTermDashboard">&times;</button>
+                                <h2>🏦 Fixed Term Dashboard</h2>
+                                
+                                <div class="dashboard-content">
+                                    <div class="dashboard-section">
+                                        <h3>Adjust Term Interest Rates</h3>
+                                        <form id="interestRateForm">
+                                            <div class="form-group">
+                                                <label>1 Month Term (Currently ${state.termInterestRates[1]}%)</label>
+                                                <input type="number" id="rate1Month" value="${state.termInterestRates[1]}" min="0" max="100" step="0.1" class="amount-input">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>2 Months Term (Currently ${state.termInterestRates[2]}%)</label>
+                                                <input type="number" id="rate2Months" value="${state.termInterestRates[2]}" min="0" max="100" step="0.1" class="amount-input">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>3 Months Term (Currently ${state.termInterestRates[3]}%)</label>
+                                                <input type="number" id="rate3Months" value="${state.termInterestRates[3]}" min="0" max="100" step="0.1" class="amount-input">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Parent Password</label>
+                                                <input type="password" id="interestRatePassword" placeholder="Enter parent password" class="password-input">
+                                            </div>
+                                            <button type="submit" class="submit-button">Update Rates</button>
+                                        </form>
+                                    </div>
+                                    
+                                    <div class="dashboard-section">
+                                        <h3>Active Fixed Term Deposits</h3>
+                                        ${state.fixedTermDeposits.length > 0 ? 
+                                            state.fixedTermDeposits
+                                                .sort((a, b) => new Date(a.endDate) - new Date(b.endDate))
+                                                .map(deposit => `
+                                                    <div class="transaction-item deposit">
+                                                        <div class="transaction-icon">🏦</div>
+                                                        <div class="transaction-details">
+                                                            <div class="transaction-description">HK$${deposit.amount.toFixed(2)} for ${deposit.term} month(s)</div>
+                                                            <div class="transaction-date">Matures: ${new Date(deposit.endDate).toLocaleDateString()}</div>
+                                                        </div>
+                                                        <div class="transaction-amount deposit">
+                                                            +HK$${deposit.interestEarned.toFixed(2)}
+                                                        </div>
+                                                    </div>
+                                                `).join('') : 
+                                            '<p>No active fixed term deposits</p>'
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${state.showCreateFixedTerm ? `
+                        <div class="transactions-overlay">
+                            <div class="transactions-page">
+                                <button class="close-button" id="closeCreateFixedTerm">&times;</button>
+                                <h2>🏦 Create Fixed Term Deposit</h2>
+                                
+                                <div class="transaction-form">
+                                    <form id="createFixedTermForm">
+                                        <div class="form-group">
+                                            <label>
+                                                <h3>Deposit Amount (HKD)</h3>
+                                                <input
+                                                    type="number"
+                                                    id="fixedTermAmount"
+                                                    placeholder="Enter amount"
+                                                    min="0"
+                                                    step="0.01"
+                                                    class="amount-input"
+                                                    required
+                                                />
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label>
+                                                <h3>Term</h3>
+                                                <select id="fixedTermSelect" class="amount-input">
+                                                    <option value="1">1 Month (Interest Rate: ${state.termInterestRates[1]}%)</option>
+                                                    <option value="2">2 Months (Interest Rate: ${state.termInterestRates[2]}%)</option>
+                                                    <option value="3">3 Months (Interest Rate: ${state.termInterestRates[3]}%)</option>
+                                                </select>
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label>
+                                                <h3>Interest Earned (Estimated)</h3>
+                                                <input
+                                                    type="text"
+                                                    id="interestEarnedDisplay"
+                                                    class="amount-input"
+                                                    disabled
+                                                    value="HK$0.00"
+                                                />
+                                            </label>
+                                        </div>
+                                        
+                                        <button type="submit" class="submit-button">
+                                            Create Deposit
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            // Attach event listeners
+            attachEventListeners();
+        }
+
+        // Attach event listeners
+        function attachEventListeners() {
+            // Transaction form handling
+            const transactionForm = document.getElementById('transactionForm');
+            if (transactionForm) {
+                transactionForm.addEventListener('submit', handleTransactionSubmit);
+            }
+            
+            // Setup password form
+            const setupPasswordForm = document.getElementById('setupPasswordForm');
+            if (setupPasswordForm) {
+                setupPasswordForm.addEventListener('submit', handlePasswordSetup);
+            }
+            
+            // Type button selection
+            const typeButtons = document.querySelectorAll('.type-button');
+            typeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove selected class from all buttons
+                    typeButtons.forEach(btn => btn.classList.remove('selected'));
+                    // Add selected class to clicked button
+                    button.classList.add('selected');
+                    
+                    // Update submit button text
+                    const submitButton = document.querySelector('.submit-button');
+                    const type = button.dataset.type;
+                    submitButton.textContent = type === 'spending' ? 'Record Spending' : 'Add Income';
+                });
+            });
+            
+            // View transactions button
+            const viewTransactionsButton = document.getElementById('viewTransactionsButton');
+            if (viewTransactionsButton) {
+                viewTransactionsButton.addEventListener('click', () => {
+                    state.showTransactions = true;
+                    saveState();
+                    render();
+                });
+            }
+            
+            // Close transactions page
+            const closeTransactionsButton = document.getElementById('closeTransactions');
+            if (closeTransactionsButton) {
+                closeTransactionsButton.addEventListener('click', () => {
+                    state.showTransactions = false;
+                    saveState();
+                    render();
+                });
+            }
+            
+            // Reset button
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetApp);
+            }
+            
+            // Fixed term dashboard button
+            const fixedTermDashboardButton = document.getElementById('fixedTermDashboardButton');
+            if (fixedTermDashboardButton) {
+                fixedTermDashboardButton.addEventListener('click', () => {
+                    state.showFixedTermDashboard = true;
+                    saveState();
+                    render();
+                });
+            }
+            
+            // Create fixed term button
+            const createFixedTermButton = document.getElementById('createFixedTermButton');
+            if (createFixedTermButton) {
+                createFixedTermButton.addEventListener('click', () => {
+                    state.showCreateFixedTerm = true;
+                    saveState();
+                    render();
+                });
+            }
+            
+            // Close fixed term dashboard
+            const closeFixedTermDashboardButton = document.getElementById('closeFixedTermDashboard');
+            if (closeFixedTermDashboardButton) {
+                closeFixedTermDashboardButton.addEventListener('click', () => {
+                    state.showFixedTermDashboard = false;
+                    saveState();
+                    render();
+                });
+            }
+            
+            // Close create fixed term form
+            const closeCreateFixedTermButton = document.getElementById('closeCreateFixedTerm');
+            if (closeCreateFixedTermButton) {
+                closeCreateFixedTermButton.addEventListener('click', () => {
+                    state.showCreateFixedTerm = false;
+                    saveState();
+                    render();
+                });
+            }
+            
+            // Interest rate form
+            const interestRateForm = document.getElementById('interestRateForm');
+            if (interestRateForm) {
+                interestRateForm.addEventListener('submit', handleInterestRateUpdate);
+            }
+            
+            // Create fixed term form
+            const createFixedTermForm = document.getElementById('createFixedTermForm');
+            if (createFixedTermForm) {
+                createFixedTermForm.addEventListener('submit', handleCreateFixedTerm);
+                
+                // Update interest earned when term or amount changes
+                const amountInput = document.getElementById('fixedTermAmount');
+                const termSelect = document.getElementById('fixedTermSelect');
+                const interestDisplay = document.getElementById('interestEarnedDisplay');
+                
+                if (amountInput && termSelect && interestDisplay) {
+                    const updateInterest = () => {
+                        const amount = parseFloat(amountInput.value) || 0;
+                        const term = parseInt(termSelect.value);
+                        const rate = state.termInterestRates[term];
+                        const interest = (amount * rate * term) / 12 / 100; // Simple interest calculation
+                        interestDisplay.value = `HK$${interest.toFixed(2)}`;
+                    };
+                    
+                    amountInput.addEventListener('input', updateInterest);
+                    termSelect.addEventListener('change', updateInterest);
+                }
+            }
+            
+            // Close income password modal
+            const closeIncomePasswordButton = document.getElementById('closeIncomePassword');
+            if (closeIncomePasswordButton) {
+                closeIncomePasswordButton.addEventListener('click', () => {
+                    state.showIncomePassword = false;
+                    saveState();
+                    render();
+                });
+            }
+            
+            // Income password form
+            const incomePasswordForm = document.getElementById('incomePasswordForm');
+            if (incomePasswordForm) {
+                incomePasswordForm.addEventListener('submit', handleIncomePasswordSubmit);
+            }
+            
+            // Close reset password modal
+            const closeResetPasswordButton = document.getElementById('closeResetPassword');
+            if (closeResetPasswordButton) {
+                closeResetPasswordButton.addEventListener('click', () => {
+                    state.showResetPassword = false;
+                    saveState();
+                    render();
+                });
+            }
+            
+            // Reset password form
+            const resetPasswordForm = document.getElementById('resetPasswordForm');
+            if (resetPasswordForm) {
+                resetPasswordForm.addEventListener('submit', handleResetPasswordSubmit);
+            }
+        }
+
+        // Handle transaction submission
+        function handleTransactionSubmit(e) {
+            e.preventDefault();
+            
+            const type = document.querySelector('.type-button.selected').dataset.type;
+            const amount = parseFloat(document.getElementById('amountInput').value);
+            const description = document.getElementById('descriptionInput').value;
+            
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            
+            // For income, show password prompt
+            if (type === 'income') {
+                // Store the transaction details temporarily
+                state.tempTransaction = { type, amount, description };
+                state.showIncomePassword = true;
+                saveState();
+                render();
+                return;
+            }
+            
+            // For spending, check if there's enough balance
+            if (type === 'spending' && amount > state.balance) {
+                alert('Not enough balance for this spending!');
+                return;
+            }
+            
+            // For spending, add directly
+            addTransaction({ type, amount, description });
+            
+            // Reset form
+            document.getElementById('amountInput').value = '';
+            document.getElementById('descriptionInput').value = '';
+        }
+        
+        // Handle income password submission
+        function handleIncomePasswordSubmit(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('incomePasswordInput').value;
+            
+            if (password === state.parentPassword) {
+                // Use the stored transaction details
+                const { type, amount, description } = state.tempTransaction;
+                
+                if (!amount || amount <= 0) {
+                    alert('Please enter a valid amount');
+                    state.showIncomePassword = false;
+                    state.tempTransaction = null;
+                    saveState();
+                    render();
+                    return;
+                }
+                
+                addTransaction({
+                    type: 'income',
+                    amount: amount,
+                    description: description || 'Parent added income'
+                });
+                
+                state.showIncomePassword = false;
+                state.tempTransaction = null;
+                saveState();
+                render();
+                
+                // Reset form
+                document.getElementById('amountInput').value = '';
+                document.getElementById('descriptionInput').value = '';
+            } else {
+                alert('Incorrect password! Please try again.');
+            }
+        }
+        
+        // Handle reset password submission
+        function handleResetPasswordSubmit(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('resetPasswordInput').value;
+            
+            if (password === state.parentPassword) {
+                state.showResetPassword = false;
+                saveState();
+                confirmReset();
+            } else {
+                alert('Incorrect password! Please try again.');
+            }
+        }
+        
+        // Handle interest rate update
+        function handleInterestRateUpdate(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('interestRatePassword').value;
+            
+            if (password !== state.parentPassword) {
+                alert('Incorrect password! Please try again.');
+                return;
+            }
+            
+            const rate1 = parseFloat(document.getElementById('rate1Month').value);
+            const rate2 = parseFloat(document.getElementById('rate2Months').value);
+            const rate3 = parseFloat(document.getElementById('rate3Months').value);
+            
+            state.termInterestRates = {
+                1: rate1,
+                2: rate2,
+                3: rate3
+            };
+            
+            saveState();
+            alert('Interest rates updated successfully!');
+            render();
+        }
+        
+        // Handle create fixed term deposit
+        function handleCreateFixedTerm(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('fixedTermAmount').value);
+            const term = parseInt(document.getElementById('fixedTermSelect').value);
+            
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            
+            if (amount > state.balance) {
+                alert('Not enough balance for this deposit!');
+                return;
+            }
+            
+            const rate = state.termInterestRates[term];
+            const interestEarned = (amount * rate * term) / 12 / 100; // Simple interest calculation
+            
+            // Calculate end date
+            const startDate = new Date();
+            const endDate = new Date();
+            endDate.setMonth(endDate.getMonth() + term);
+            
+            const newDeposit = {
+                id: Date.now(),
+                amount: amount,
+                term: term,
+                startDate: startDate,
+                endDate: endDate,
+                interestRate: rate,
+                interestEarned: interestEarned,
+                isMatured: false
+            };
+            
+            state.fixedTermDeposits.push(newDeposit);
+            state.balance -= amount; // Deduct from balance
+            
+            // Add transaction for the deposit (but don't deduct again)
+            const newTransaction = {
+                type: 'spending',
+                amount: amount,
+                description: `Fixed deposit for ${term} month(s) at ${rate}%`,
+                id: Date.now(),
+                date: new Date().toLocaleDateString()
+            };
+            
+            state.transactions.unshift(newTransaction);
+            
+            state.showCreateFixedTerm = false;
+            saveState();
+            render();
+            
+            alert(`Fixed deposit created! You'll earn HK$${interestEarned.toFixed(2)} in interest when it matures on ${endDate.toLocaleDateString()}.`);
+        }
+        
+        // Add a transaction
+        function addTransaction(transaction) {
+            const newTransaction = {
+                ...transaction,
+                id: Date.now(),
+                date: new Date().toLocaleDateString()
+            };
+            
+            state.transactions.unshift(newTransaction);
+            
+            // Update balance based on transaction type
+            if (transaction.type === 'income') {
+                state.balance += transaction.amount;
+            } else if (transaction.type === 'spending') {
+                state.balance = Math.max(0, state.balance - transaction.amount);
+            }
+            
+            saveState();
+            render();
+        }
+
+        // Check for matured deposits
+        function checkMaturedDeposits() {
+            const now = new Date();
+            let updated = false;
+            
+            // Filter out matured deposits and process them
+            state.fixedTermDeposits = state.fixedTermDeposits.filter(deposit => {
+                // Ensure endDate is a Date object
+                const endDate = new Date(deposit.endDate);
+                
+                // Also ensure startDate is a Date object
+                const startDate = new Date(deposit.startDate);
+                
+                // Debug information (can be removed later)
+                // console.log('Checking deposit:', deposit.id, 'Start:', startDate, 'End:', endDate, 'Now:', now, 'Matured:', !deposit.isMatured && now >= endDate);
+                
+                if (!deposit.isMatured && now >= endDate) {
+                    // Add interest to balance when deposit matures
+                    state.balance += deposit.amount + deposit.interestEarned;
+                    updated = true;
+                    
+                    // Add transaction for the matured deposit (but don't add to balance again)
+                    const newTransaction = {
+                        type: 'income',
+                        amount: deposit.amount + deposit.interestEarned,
+                        description: `Matured deposit: HK$${deposit.amount.toFixed(2)} + HK$${deposit.interestEarned.toFixed(2)} interest`,
+                        id: Date.now(),
+                        date: new Date().toLocaleDateString()
+                    };
+                    
+                    state.transactions.unshift(newTransaction);
+                    
+                    // Return false to remove this deposit from the list
+                    return false;
+                }
+                // Return true to keep non-matured deposits
+                return true;
+            });
+            
+            if (updated) {
+                saveState();
+                render();
+            }
+        }
+
+        // Handle password setup
+        function handlePasswordSetup(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('setupPasswordInput').value;
+            const confirmPassword = document.getElementById('confirmSetupPasswordInput').value;
+            
+            if (!password) {
+                alert('Please enter a password');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            state.parentPassword = password;
+            state.isPasswordSet = true;
+            saveState();
+            render();
+        }
+        
+        // Reset the app
+        function resetApp() {
+            state.showResetPassword = true;
+            saveState();
+            render();
+        }
+        
+        // Confirm reset with password
+        function confirmReset() {
+            if (confirm('Are you sure you want to reset the app? All data will be lost.')) {
+                // Clear all data from localStorage
+                localStorage.removeItem('piggyBankState');
+                
+                // Reset state to initial values
+                state = {
+                    balance: 0,
+                    transactions: [],
+                    showTransactions: false,
+                    parentPassword: null,
+                    isPasswordSet: false,
+                    showIncomePassword: false,
+                    showResetPassword: false,
+                    tempTransaction: null,
+                    fixedTermDeposits: [],
+                    termInterestRates: {
+                        1: 2.5,
+                        2: 3.0,
+                        3: 4.0
+                    },
+                    showFixedTermDashboard: false,
+                    showCreateFixedTerm: false
+                };
+                
+                // Save the reset state
+                saveState();
+                
+                // Re-render the app
+                render();
+            }
+        }
+        
+        // Initialize the app
+        function init() {
+            loadState();
+            render();
+            
+            // Check for matured deposits every 10 seconds (for testing)
+            setInterval(checkMaturedDeposits, 10000);
+        }
+
+        // Start the app when the page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

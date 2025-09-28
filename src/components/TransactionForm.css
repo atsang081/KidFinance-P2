@@ -1,0 +1,81 @@
+.transaction-form {
+  background: #f3e5f5;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group h3 {
+  color: #6a1b9a;
+  margin-bottom: 10px;
+}
+
+.type-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.type-button {
+  flex: 1;
+  min-width: 100px;
+  padding: 15px;
+  border: none;
+  border-radius: 15px;
+  background: #e1bee7;
+  color: #4a148c;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.type-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.type-button.selected {
+  background: #9c27b0;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.amount-input, .description-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ba68c8;
+  border-radius: 10px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.amount-input:focus, .description-input:focus {
+  outline: none;
+  border-color: #7b1fa2;
+  box-shadow: 0 0 5px rgba(123, 31, 162, 0.5);
+}
+
+.submit-button {
+  background: linear-gradient(135deg, #ff6f00 0%, #ff3d00 100%);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.submit-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
