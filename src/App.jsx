@@ -109,6 +109,29 @@ function App() {
       <main className="app-main">
         <div className="dashboard">
           <BalanceDisplay balance={balance} />
+          
+          {fixedTermDeposits.length > 0 && (
+            <div className="fixed-term-summary">
+              <h3>Active Fixed Term Deposits</h3>
+              {fixedTermDeposits
+                .sort((a, b) => new Date(a.endDate) - new Date(b.endDate))
+                .map(deposit => {
+                  const daysLeft = Math.ceil((new Date(deposit.endDate) - new Date()) / (1000 * 60 * 60 * 24));
+                  return (
+                    <div key={deposit.id} className="fixed-term-item">
+                      <div className="fixed-term-amount">HK${deposit.amount.toFixed(2)}</div>
+                      <div className="fixed-term-details">
+                        <div>{deposit.termInDays} days at {interestRate}%</div>
+                        <div>Matures: {new Date(deposit.endDate).toLocaleDateString()} ({daysLeft} days left)</div>
+                      </div>
+                      <div className="fixed-term-interest">+HK${deposit.interestEarned.toFixed(2)}</div>
+                    </div>
+                  );
+                })
+              }
+            </div>
+          )}
+          
           <PiggyBank balance={balance} />
         </div>
 
@@ -117,18 +140,26 @@ function App() {
           <TransactionForm onAddTransaction={addTransaction} />
         </div>
 
-        <div className="fixed-deposit-section">
+        <div className="fixed-term-section">
           <h2>Fixed Term Deposits</h2>
-          <button onClick={() => addFixedTermDeposit(100, 30)} className="deposit-button">
-            Create 30-day Deposit (HK$100)
-          </button>
-          <button onClick={() => addFixedTermDeposit(200, 60)} className="deposit-button">
-            Create 60-day Deposit (HK$200)
+          <div className="fixed-term-buttons">
+            <button onClick={() => addFixedTermDeposit(100, 30)} className="submit-button">
+              Create 30-day Deposit (HK$100)
+            </button>
+            <button onClick={() => addFixedTermDeposit(200, 60)} className="submit-button">
+              Create 60-day Deposit (HK$200)
+            </button>
+          </div>
+        </div>
+
+        <div className="transactions-page-button">
+          <button className="view-transactions-button">
+            View All Transactions
           </button>
         </div>
 
         <div className="parent-access">
-          <button onClick={() => setShowParentDashboard(true)} className="parent-button">
+          <button onClick={() => setShowParentDashboard(true)} className="view-transactions-button">
             Parent Dashboard
           </button>
         </div>

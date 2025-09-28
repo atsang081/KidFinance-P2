@@ -1,169 +1,129 @@
 .piggy-bank {
-  position: relative;
-  width: 200px;
-  height: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.piggy-body {
-  position: relative;
-  width: 150px;
-  height: 120px;
-  background: #ffccbc;
-  border-radius: 70% 70% 60% 60%;
-  box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.piggy-ear {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  background: #ffab91;
-  border-radius: 50%;
-  top: -15px;
-}
-
-.left-ear {
-  left: 30px;
-}
-
-.right-ear {
-  right: 30px;
-}
-
-.piggy-eye {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background: #333;
-  border-radius: 50%;
-  top: 40px;
-}
-
-.left-eye {
-  left: 45px;
-}
-
-.right-eye {
-  right: 45px;
-}
-
-.piggy-nose {
-  position: absolute;
-  width: 30px;
-  height: 25px;
-  background: #ff8a65;
-  border-radius: 50%;
-  top: 60px;
-}
-
-.piggy-nostril {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background: #333;
-  border-radius: 50%;
-  top: 10px;
-  left: 8px;
-}
-
-.piggy-nostril::after {
-  content: '';
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background: #333;
-  border-radius: 50%;
-  left: 10px;
-}
-
-.piggy-mouth {
-  position: absolute;
-  width: 40px;
-  height: 20px;
-  border-bottom: 3px solid #e65100;
-  border-radius: 0 0 50% 50%;
-  top: 75px;
-}
-
-.piggy-tail {
-  position: absolute;
-  width: 20px;
-  height: 10px;
-  background: #ffab91;
-  border-radius: 50%;
-  top: 70px;
-  right: -15px;
-  transform: rotate(30deg);
-}
-
-.piggy-leg {
-  position: absolute;
-  width: 20px;
-  height: 25px;
-  background: #ff8a65;
-  border-radius: 50%;
-  bottom: -15px;
-}
-
-.front-leg {
-  left: 40px;
-}
-
-.back-leg {
-  right: 40px;
-}
-
-.balance-display {
-  margin-top: 20px;
-  background: #fff3e0;
-  padding: 10px 20px;
+  background: #ffe0e6;
+  padding: 20px;
   border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  min-width: 200px;
+}
+
+.piggy-character {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.piggy-face {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  background: #ffb3ba;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.balance-display p {
-  margin: 0;
-  color: #ff6f00;
-  font-weight: bold;
+.piggy-eyes {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 5px;
 }
 
-.balance-display h2 {
-  margin: 5px 0 0;
-  color: #e65100;
+.eye {
+  width: 8px;
+  height: 8px;
+  background: #333;
+  border-radius: 50%;
 }
 
-.coin-animation {
+.piggy-snout {
+  width: 25px;
+  height: 15px;
+  background: #ff9999;
+  border-radius: 50%;
+  position: relative;
+}
+
+.piggy-snout::before,
+.piggy-snout::after {
+  content: '';
   position: absolute;
-  top: -30px;
+  width: 3px;
+  height: 3px;
+  background: #333;
+  border-radius: 50%;
+  top: 6px;
+}
+
+.piggy-snout::before {
+  left: 6px;
+}
+
+.piggy-snout::after {
+  right: 6px;
+}
+
+.piggy-coins {
   display: flex;
   gap: 5px;
+  margin-top: 10px;
 }
 
 .coin {
-  width: 20px;
-  height: 20px;
-  background: #ffd700;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  animation: coin-drop 1s ease infinite;
+  animation: coin-float 2s ease-in-out infinite;
 }
 
-@keyframes coin-drop {
-  0% {
-    transform: translateY(-50px);
-    opacity: 0;
+.coin-1 {
+  background: #ffd700;
+  animation-delay: 0s;
+}
+
+.coin-2 {
+  background: #ffed4e;
+  animation-delay: 0.3s;
+}
+
+.coin-3 {
+  background: #fff59d;
+  animation-delay: 0.6s;
+}
+
+@keyframes coin-float {
+  0%, 100% {
+    transform: translateY(0);
   }
   50% {
-    opacity: 1;
+    transform: translateY(-5px);
   }
-  100% {
-    transform: translateY(0);
-    opacity: 0;
-  }
+}
+
+.savings-display {
+  text-align: center;
+  background: #fff;
+  padding: 10px 15px;
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.savings-display p {
+  margin: 0;
+  color: #ff6f00;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.savings-display h3 {
+  margin: 5px 0 0;
+  color: #ff6f00;
+  font-size: 1.2rem;
 }

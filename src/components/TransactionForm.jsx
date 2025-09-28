@@ -40,13 +40,6 @@ const TransactionForm = ({ onAddTransaction }) => {
               </button>
               <button
                 type="button"
-                className={`type-button ${type === 'deposit' ? 'selected' : ''}`}
-                onClick={() => setType('deposit')}
-              >
-                🏦 Deposit
-              </button>
-              <button
-                type="button"
                 className={`type-button ${type === 'income' ? 'selected' : ''}`}
                 onClick={() => setType('income')}
               >
@@ -85,9 +78,7 @@ const TransactionForm = ({ onAddTransaction }) => {
         </div>
 
         <button type="submit" className="submit-button">
-          {type === 'spending' ? 'Record Spending' : 
-           type === 'deposit' ? 'Make Deposit' : 
-           'Add Income'}
+          {type === 'spending' ? 'Record Spending' : 'Add Income'}
         </button>
       </form>
     </div>
